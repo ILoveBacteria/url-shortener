@@ -22,12 +22,19 @@
     <p>Salam {{ current_user.username }}</p>
     <a href="{{ url_for('logout') }}">Logout</a>
 
+    <br>
+    <a href="{{ url_for('create_new_link') }}">Create a new link</a>
+    <br>
+
     {% for link in current_user.links %}
-        <a href="{{ url_for('short_url', slug=link.slug) }}">link.redirect_url</a>
+        <a href="{{ url_for('short_url', slug=link.slug) }}">{{ link.redirect_url }} - {{ link.visits.count() }}</a>
+        <br>
     {% endfor %}
 
 {% else %}
     <a href="{{ url_for('login') }}">Login</a>
+    <br>
+    <a href="{{ url_for('signup') }}">Sign Up</a>
 {% endif %}
 </body>
 </html>
