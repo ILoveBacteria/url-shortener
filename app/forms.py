@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
+from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, URL
 from app.models import User
 
 
@@ -24,3 +24,8 @@ class SignUpForm(FlaskForm):
     def validate_email(self, email: StringField):
         if User.query.filter_by(email=email.data).first() is not None:
             raise ValidationError('Email already exists')
+
+
+class NewLinkForm(FlaskForm):
+    redirect_url = StringField('Redirect URL', validators=[DataRequired()])
+    submit = SubmitField('Create')
