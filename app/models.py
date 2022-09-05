@@ -25,13 +25,26 @@ class User(UserMixin, db.Model):
 
 class Link(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     slug = db.Column(db.String(255), index=True, unique=True)
     redirect_url = db.Column(db.String(4096))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    visits = db.relationship('Visit', backref='link', lazy='dynamic')
 
     def __repr__(self):
         return f'Link: {self.slug}'
+
+
+class Visit(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    link_id = db.Column(db.Integer, db.ForeignKey('link.id'))
+    ip = db.Column(db.String(255), index=True)
+    referer = db.Column(db.String(4096))
+    user_agent = db.Column(db.String(4096))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'Visit: {self.ip}'
 
 
 @login.user_loader
