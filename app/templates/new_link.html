@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% if title %}
+        <title>{{ title }} | Url Shortener</title>
+    {% else %}
+        <title>Url Shortener</title>
+    {% endif %}
+</head>
+<body>
+<h1>Create New Link</h1>
+<form method="post">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.redirect_url.label }}
+        <br>
+        {{ form.redirect_url() }}
+        {% for error in form.redirect_url.errors %}
+            <p style="color: red">{{ error }}</p>
+        {% endfor %}
+
+    </p>
+    <p>
+        {{ form.submit() }}
+    </p>
+</form>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+</body>
+</html>
