@@ -6,7 +6,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 
 from app import app, db
 from app.forms import LoginForm, SignUpForm, NewLinkForm
-from app.models import User, Link
+from app.models import User, Link, Visit
 
 
 def random_slug(size=6, chars=string.ascii_lowercase + string.ascii_uppercase + string.digits):
@@ -14,7 +14,6 @@ def random_slug(size=6, chars=string.ascii_lowercase + string.ascii_uppercase + 
 
 
 @app.route('/')
-@login_required
 def index():
     return render_template('index.html', title='Home')
 
@@ -78,6 +77,10 @@ def create_new_link():
 @app.route('/r/<slug>')
 def short_url(slug):
     link = Link.query.filter_by(slug=slug).first()
-    if link is not None:
-        return redirect(link.redirect_url)
-    return '404', 404
+    if link is None:
+        return '404', 404
+
+    visit = Visit(ip=request.remote_addr, referer=request.referrer, user_agent=request.user_agent.string, link=link)
+    db.session.add(visit)
+    db.session.commit()
+    return redirect(link.redirect_url)
