@@ -21,6 +21,11 @@
 {% if current_user.is_authenticated %}
     <p>Salam {{ current_user.username }}</p>
     <a href="{{ url_for('logout') }}">Logout</a>
+
+    {% for link in current_user.links %}
+        <a href="{{ url_for('short_url', slug=link.slug) }}">link.redirect_url</a>
+    {% endfor %}
+
 {% else %}
     <a href="{{ url_for('login') }}">Login</a>
 {% endif %}
