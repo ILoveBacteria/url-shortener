@@ -8,6 +8,8 @@ from app import app, db
 from app.forms import LoginForm, SignUpForm, NewLinkForm
 from app.models import User, Link, Visit
 
+from sqlalchemy import func
+
 
 def random_slug(size=6, chars=string.ascii_lowercase + string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
@@ -15,7 +17,18 @@ def random_slug(size=6, chars=string.ascii_lowercase + string.ascii_uppercase + 
 
 @app.route('/')
 def index():
-    return render_template('index.html', title='Home')
+    links = db.session.query(
+        Link.id,
+        Link.redirect_url,
+        Link.slug,
+        Link.user_id,
+        func.count(Visit.id)
+    )\
+        .filter_by(user_id=current_user.id)\
+        .join(Visit, isouter=True)\
+        .group_by(Link.id)\
+        .all()
+    return render_template('index.html', title='Home', links=links)
 
 
 @app.route('/login', methods=['GET', 'POST'])

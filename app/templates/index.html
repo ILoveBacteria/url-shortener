@@ -26,8 +26,8 @@
     <a href="{{ url_for('create_new_link') }}">Create a new link</a>
     <br>
 
-    {% for link in current_user.links %}
-        <a href="{{ url_for('short_url', slug=link.slug) }}">{{ link.redirect_url }} - {{ link.visits.count() }}</a>
+    {% for link in links %}
+        <a href="{{ url_for('short_url', slug=link[2]) }}">{{ link[1] }} - {{ link[4] }}</a>
         <br>
     {% endfor %}
 
