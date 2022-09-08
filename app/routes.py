@@ -66,7 +66,11 @@ def create_new_link():
     form = NewLinkForm()
 
     if form.validate_on_submit():
-        link = Link(slug=random_slug(), redirect_url=form.redirect_url.data, user=current_user)
+        slug = random_slug()
+        while Link.query.filter_by(slug=slug).first() is not None:
+            slug = random_slug()
+
+        link = Link(slug=slug, redirect_url=form.redirect_url.data, user=current_user)
         db.session.add(link)
         db.session.commit()
         return redirect(url_for('index'))
