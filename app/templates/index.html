@@ -25,10 +25,26 @@
     <br>
     <a href="{{ url_for('create_new_link') }}">Create a new link</a>
     <br>
+    <br>
 
-    {% for link in links %}
+    {% for link in links.items %}
         <a href="{{ url_for('short_url', slug=link[2]) }}">{{ link[1] }} - {{ link[4] }}</a>
         <br>
+    {% endfor %}
+    
+    <br>
+    <br>
+    
+    {% for page in links.iter_pages() %}
+        {% if page %}
+            {% if page != links.page %}
+                <a href="{{ url_for('index', page=page) }}">{{ page }}</a>
+            {% else %}
+                <strong>{{ page }}</strong>
+            {% endif %}
+        {% else %}
+            <span class=ellipsis>…</span>
+        {% endif %}
     {% endfor %}
 
 {% else %}

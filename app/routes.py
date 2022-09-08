@@ -17,17 +17,22 @@ def random_slug(size=6, chars=string.ascii_lowercase + string.ascii_uppercase + 
 
 @app.route('/')
 def index():
-    links = db.session.query(
-        Link.id,
-        Link.redirect_url,
-        Link.slug,
-        Link.user_id,
-        func.count(Visit.id)
-    )\
-        .filter_by(user_id=current_user.id)\
-        .join(Visit, isouter=True)\
-        .group_by(Link.id)\
-        .all()
+    if current_user.is_authenticated:
+        current_page = request.args.get('page', 1, type=int)
+        links = db.session.query(
+            Link.id,
+            Link.redirect_url,
+            Link.slug,
+            Link.user_id,
+            func.count(Visit.id)
+        )\
+            .filter_by(user_id=current_user.id)\
+            .join(Visit, isouter=True)\
+            .group_by(Link.id)\
+            .order_by(Link.id.desc())\
+            .paginate(current_page, 2)
+    else:
+        links = None
     return render_template('index.html', title='Home', links=links)
 
 
