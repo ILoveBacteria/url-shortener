@@ -1,56 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    {% if title %}
-        <title>{{ title }} | Url Shortener</title>
-    {% else %}
-        <title>Url Shortener</title>
-    {% endif %}
-</head>
-<body>
-<h1>Welcome to Url Shortener</h1>
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-            <p>{{ message }}</p>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
 
-{% if current_user.is_authenticated %}
-    <p>Salam {{ current_user.username }}</p>
-    <a href="{{ url_for('logout') }}">Logout</a>
-
-    <br>
-    <a href="{{ url_for('create_new_link') }}">Create a new link</a>
-    <br>
-    <br>
-
-    {% for link in links.items %}
-        <a href="{{ url_for('short_url', slug=link[2]) }}">{{ link[1] }} - {{ link[4] }}</a>
-        <br>
-    {% endfor %}
-    
-    <br>
-    <br>
-    
-    {% for page in links.iter_pages() %}
-        {% if page %}
-            {% if page != links.page %}
-                <a href="{{ url_for('index', page=page) }}">{{ page }}</a>
-            {% else %}
-                <strong>{{ page }}</strong>
-            {% endif %}
-        {% else %}
-            <span class=ellipsis>…</span>
+{% block content %}
+    <h1 class="mb-3">Welcome to Url Shortener</h1>
+    <!--Flash messages-->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                {% if category == 'message' %}
+                    {% set category = 'primary' %}
+                {% endif %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
         {% endif %}
-    {% endfor %}
+    {% endwith %}
 
-{% else %}
-    <a href="{{ url_for('login') }}">Login</a>
-    <br>
-    <a href="{{ url_for('signup') }}">Sign Up</a>
-{% endif %}
-</body>
-</html>
+    {% if current_user.is_authenticated %}
+        <!--Logout and Create-new-link buttons-->
+        <p>Salam {{ current_user.username }}</p>
+        <a href="{{ url_for('logout') }}" class="btn btn-outline-danger" role="button">Logout</a>
+        <a href="{{ url_for('create_new_link') }}" class="btn btn-primary" role="button">Create a new link</a>
+        <hr>
+        <!--Show redirect links-->
+        {% for link in links.items %}
+            <a href="{{ url_for('short_url', slug=link[2]) }}">{{ link[1] }} - {{ link[4] }}</a>
+            <br>
+        {% endfor %}
+        <hr>
+        <!--Pagination-->
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <!--Previous-->
+                {% if links.has_prev %}
+                    <li class="page-item">
+                {% else %}
+                    <li class="page-item disabled">
+                {% endif %}
+                <a class="page-link" href="{{ url_for('index', page=links.page - 1) }}">Previous</a></li>
+                <!--Pages-->
+                {% for page in links.iter_pages(right_current=3) %}
+                    {% if page %}
+                        {% if page != links.page %}
+                            <li class="page-item"><a class="page-link" href="{{ url_for('index', page=page) }}">{{ page }}</a></li>
+                        {% else %}
+                            <li class="page-item active"><span class="page-link">{{ page }}</span></li>
+                        {% endif %}
+                    {% else %}
+                        <li class="page-item"><span class="page-link">...</span></li>
+                    {% endif %}
+                {% endfor %}
+                <!--Next-->
+                {% if links.has_next %}
+                    <li class="page-item">
+                {% else %}
+                    <li class="page-item disabled">
+                {% endif %}
+                <a class="page-link" href="{{ url_for('index', page=links.page + 1) }}">Next</a></li>
+            </ul>
+        </nav>
+    <!--Login and Signup buttons-->
+    {% else %}
+        <a href="{{ url_for('login') }}" class="btn btn-primary" role="button">Login</a>
+        <a href="{{ url_for('signup') }}" class="btn btn-primary" role="button">Sign Up</a>
+    {% endif %}
+{% endblock %}
