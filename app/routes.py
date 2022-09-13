@@ -30,7 +30,7 @@ def index():
             .join(Visit, isouter=True)\
             .group_by(Link.id)\
             .order_by(Link.id.desc())\
-            .paginate(current_page, 2)
+            .paginate(current_page, 1)
     else:
         links = None
     return render_template('index.html', title='Home', links=links)
@@ -46,10 +46,10 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash('Username or password is incorrect')
+            flash('Username or password is incorrect', 'danger')
             return redirect(url_for('login'))
         login_user(user, remember=True)
-        flash('Login successfully')
+        flash('Login successfully', 'success')
         return redirect(request.args.get('next') or url_for('index'))
 
     return render_template('login.html', title='Login', form=form)
@@ -73,7 +73,7 @@ def signup():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Sign up successfully')
+        flash('Sign up successfully', 'success')
         return redirect(url_for('login'))
     return render_template('signup.html', title='Sign Up', form=form)
 
