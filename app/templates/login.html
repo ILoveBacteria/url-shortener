@@ -51,7 +51,9 @@
                 {% endfor %}
             </div>
             <!--Submit button-->
-            {{ form.submit(class="btn btn-primary w-100", role="button") }}
+            {{ form.submit(class="btn btn-primary w-100 mb-5", role="button") }}
+            <!--Signup-->
+            <div class="text-muted">Don't have an account? <a href="{{ url_for('signup') }}">Signup</a></div>
         </form>
     </div>
 {% endblock %}
