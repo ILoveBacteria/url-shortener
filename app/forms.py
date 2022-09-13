@@ -27,5 +27,5 @@ class SignUpForm(FlaskForm):
 
 
 class NewLinkForm(FlaskForm):
-    redirect_url = StringField('Redirect URL', validators=[DataRequired()])
+    redirect_url = StringField('Redirect URL', validators=[DataRequired(), URL()])
     submit = SubmitField('Create')
