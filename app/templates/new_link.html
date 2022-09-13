@@ -1,36 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    {% if title %}
-        <title>{{ title }} | Url Shortener</title>
-    {% else %}
-        <title>Url Shortener</title>
-    {% endif %}
-</head>
-<body>
-<h1>Create New Link</h1>
-<form method="post">
-    {{ form.hidden_tag() }}
-    <p>
-        {{ form.redirect_url.label }}
-        <br>
-        {{ form.redirect_url() }}
-        {% for error in form.redirect_url.errors %}
-            <p style="color: red">{{ error }}</p>
-        {% endfor %}
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
 
-    </p>
-    <p>
-        {{ form.submit() }}
-    </p>
-</form>
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-            <p>{{ message }}</p>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
-</body>
-</html>
+{% block content %}
+    <h1 class="mb-3">Create New Link</h1>
+    <!--Flash messages-->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                {% if category == 'message' %}
+                    {% set category = 'primary' %}
+                {% endif %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <!--Form-->
+    <form method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            <!--Label-->
+            {{ form.redirect_url.label(class="form-label") }}
+            <!--Field-->
+            {% if form.redirect_url.errors %}
+                {{ form.redirect_url(class='form-control is-invalid', placeholder="https://www.example.com") }}
+            {% else %}
+                {{ form.redirect_url(class='form-control', placeholder="https://www.example.com") }}
+            {% endif %}
+            <!--Errors-->
+            {% for error in form.redirect_url.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <!--Submit button-->
+        {{ form.submit(class="btn btn-primary", role="button") }}
+    </form>
+{% endblock %}
