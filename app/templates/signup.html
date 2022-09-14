@@ -1,8 +1,8 @@
 {% extends "pure-form.html" %}
 {% block title %}{{ title }}{% endblock %}
 
-{% block content %}
-    <div class="container-form position-absolute top-50 start-50 translate-middle w-100 border rounded-2">
+{% block body %}
+    <div class="container-form mx-auto w-100 border rounded-2">
         <h1 class="mb-3">Sign Up</h1>
         <!--Flash messages-->
         {% with messages = get_flashed_messages(with_categories=true) %}
