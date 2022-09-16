@@ -23,7 +23,7 @@
 </head>
 <body>
     <!--Navbar-->
-    <nav class="navbar navbar-dark navbar-expand-lg bg-dark mb-5">
+    <nav class="navbar navbar-dark navbar-expand-lg bg-dark mb-3">
         <div class="container-fluid">
             <span class="navbar-brand mb-0 h1">URL Shortener</span>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,10 +55,25 @@
             </div>
         </div>
     </nav>
-    {% block body %}
-        <main class="container">
-            {% block content %}{% endblock %}
-            <!--Footer-->
+    <main class="container">
+        <!--Flash messages-->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    {% if category == 'message' %}
+                        {% set category = 'primary' %}
+                    {% endif %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show mb-3" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <!--Block content-->
+        {% block content %}{% endblock %}
+        <!--Footer-->
+        {% block footer %}
             <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
                 <div class="col-md-4 d-flex align-items-center">
                     <span class="mb-3 mb-md-0 text-muted">Moein Arabi</span>
@@ -69,7 +84,7 @@
                     <li class="ms-3"><a class="text-muted" href="#"><svg class="bi" width="24" height="24" fill="currentColor"><use href="#telegram"></use></svg></a></li>
                 </ul>
             </footer>
-        </main>
-    {% endblock %}
+        {% endblock %}
+    </main>
 </body>
 </html>
