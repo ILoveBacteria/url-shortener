@@ -42,6 +42,11 @@
                     {% else %}
                         <a class="nav-link" href="{{ url_for('create_new_link') }}">Create Link</a>
                     {% endif %}
+                    {% if request.path == url_for('links') %}
+                        <a class="nav-link active" href="{{ url_for('links') }}">My Links</a>
+                    {% else %}
+                        <a class="nav-link" href="{{ url_for('links') }}">My Links</a>
+                    {% endif %}
                     <a class="nav-link disabled" href="#">About</a>
                     <a class="nav-link disabled">Disabled</a>
                 </div>
