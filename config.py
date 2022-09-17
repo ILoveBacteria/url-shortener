@@ -1,4 +1,7 @@
+import os
+
+
 class Config:
-    SECRET_KEY = 'ac%sA2S@dw!'
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'ac%sA2S@dw!'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI = "postgresql://postgres:password@localhost:5432/postgres"
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
