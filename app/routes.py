@@ -1,7 +1,7 @@
 import random
 import string
 
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, send_from_directory
 from flask_login import current_user, login_user, logout_user, login_required
 
 from app import app, db
@@ -110,3 +110,8 @@ def links():
         .paginate(current_page, 4)
 
     return render_template('links.html', links=links, title='My Links')
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory('static', 'icon/favicon.ico')
