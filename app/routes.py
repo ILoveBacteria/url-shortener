@@ -1,7 +1,7 @@
 import random
 import string
 
-from flask import render_template, flash, redirect, url_for, request, send_from_directory
+from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 
 from app import app, db
@@ -110,18 +110,3 @@ def links():
         .paginate(current_page, 4)
 
     return render_template('links.html', links=links, title='My Links')
-
-
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory('static', 'icon/favicon.ico')
-
-
-@app.route('/android-chrome-192x192.png')
-def android_chrome_192():
-    return send_from_directory('static', 'icon/android-chrome-192x192.png')
-
-
-@app.route('/android-chrome-512x512.png')
-def android_chrome_512():
-    return send_from_directory('static', 'icon/android-chrome-512x512.png')

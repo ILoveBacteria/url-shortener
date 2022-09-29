@@ -15,4 +15,4 @@ login = LoginManager(app)
 # The user will be redirected if he was not logged in to the user account
 login.login_view = 'login'
 
-from app import routes, models
+from app import routes, models, icon_routes
