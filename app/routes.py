@@ -115,3 +115,13 @@ def links():
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory('static', 'icon/favicon.ico')
+
+
+@app.route('/android-chrome-192x192.png')
+def android_chrome_192():
+    return send_from_directory('static', 'icon/android-chrome-192x192.png')
+
+
+@app.route('/android-chrome-512x512.png')
+def android_chrome_512():
+    return send_from_directory('static', 'icon/android-chrome-512x512.png')
