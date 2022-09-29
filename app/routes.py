@@ -107,6 +107,6 @@ def links():
         .join(Visit, isouter=True)\
         .group_by(Link.id)\
         .order_by(Link.id.desc())\
-        .paginate(current_page, 1)
+        .paginate(current_page, 4)
 
     return render_template('links.html', links=links, title='My Links')

@@ -3,10 +3,26 @@
 
 {% block content %}
     <!--Show redirect links-->
-    {% for link in links.items %}
-        <a href="{{ url_for('short_url', slug=link[2]) }}">{{ link[1] }} - {{ link[4] }}</a>
-        <br>
-    {% endfor %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Link</th>
+                <th scope="col">Short Link</th>
+                <th scope="col">Visits</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for link in links.items %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ link[1] }}</td>
+                <td><a href="{{ url_for('short_url', slug=link[2]) }}">{{ url_for('short_url', slug=link[2]) }}</a></td>
+                <td>{{ link[4] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
     <hr>
     <!--Pagination-->
     <nav aria-label="Page navigation">
@@ -40,3 +56,5 @@
         </ul>
     </nav>
 {% endblock %}
+<!--Remove footer-->
+{% block footer %}{% endblock %}
